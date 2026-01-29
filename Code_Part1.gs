@@ -167,19 +167,15 @@ function configurarSistemaCompleto() {
     Logger.log('📅 Calendar ID: ' + CALENDAR_ID);
     Logger.log('📁 Drive Folder ID: ' + DRIVE_ROOT_FOLDER_ID);
     Logger.log('⏰ Fin: ' + new Date().toLocaleString());
-
-    // Mostrar diálogo de confirmación
-    const ui = SpreadsheetApp.getUi();
-    ui.alert(
-      '✅ OVA CRM Configurado',
-      'El sistema se ha configurado correctamente.\n\n' +
-      '📊 Base de datos: ' + ss.getName() + '\n' +
-      '📅 Calendario creado\n' +
-      '📁 Carpeta Drive creada\n' +
-      '⏰ Automatizaciones activadas\n\n' +
-      'Puedes acceder al CRM desplegando este script como Web App.',
-      ui.ButtonSet.OK
-    );
+    Logger.log('');
+    Logger.log('🎉 ¡SISTEMA CONFIGURADO!');
+    Logger.log('📋 Siguiente paso: Crear archivo HTML en Apps Script');
+    Logger.log('   1. En el editor, haz clic en el icono "+" junto a Archivos');
+    Logger.log('   2. Selecciona "HTML"');
+    Logger.log('   3. Nómbralo exactamente "Index" (sin extensión)');
+    Logger.log('   4. Copia el contenido de Index.html del repositorio');
+    Logger.log('   5. Guarda y despliega como Web App');
+    Logger.log('');
 
     return ss;
 
