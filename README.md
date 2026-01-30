@@ -1,290 +1,378 @@
-# 🚀 OVA CRM - Sistema Completo
+# 🎯 OVA CRM - Sistema de Gestión de Relaciones con Clientes
 
-Sistema CRM web completo desarrollado con Google Apps Script, integrado con Google Sheets, Calendar y Drive.
-
-## 📋 Tabla de Contenidos
-
-- [Características](#características)
-- [Instalación](#instalación)
-- [Configuración de API Key](#configuración-de-api-key)
-- [Despliegue como Web App](#despliegue-como-web-app)
-- [Estructura del Proyecto](#estructura-del-proyecto)
-- [Usuarios por Defecto](#usuarios-por-defecto)
+**Versión 2.0** - Migrado a Next.js + Vercel + Google Sheets API
 
 ---
 
-## ✨ Características
+## 🌟 Características
 
-### **Fase 1 - Funcionalidad Core**
-- ✅ Login con usuarios desde Google Sheets
-- ✅ Dashboard con métricas en tiempo real (auto-refresh cada 30s)
-- ✅ Chat IA integrado con Groq API (Llama 3.3 70B)
-- ✅ Gestión de reuniones (crear, editar, eliminar, sync con Google Calendar)
-- ✅ Gestión de tareas con sistema Kanban (Pendiente → En Progreso → Completada)
-- ✅ Gestión de contactos completa con carpetas automáticas en Drive
-- ✅ Sistema de notificaciones
+### 📊 Dashboard Completo
+- Métricas en tiempo real
+- Resumen de actividades
+- Estadísticas de ventas
+- Visualización del pipeline
 
-### **Fases Avanzadas**
-- ✅ Calendario visual (mes/semana/día) con drag & drop
-- ✅ Pipeline de ventas con etapas personalizables
-- ✅ Sistema de cotizaciones completo
-- ✅ Reportes con gráficos avanzados
-- ✅ Gestor de documentos por cliente
-- ✅ Sistema de roles y permisos (admin, manager, usuario, readonly)
-- ✅ Automatizaciones y recordatorios
+### 📅 Gestión de Reuniones
+- Crear, editar y eliminar reuniones
+- Estados: Pendiente, Confirmada, Completada, Cancelada
+- Recordatorios configurables
+- Asistentes y ubicación
 
----
+### ✅ Tareas Kanban
+- Tablero Kanban visual
+- Prioridades: Baja, Media, Alta, Urgente
+- Estados: Por Hacer, En Progreso, Completada
+- Asignación de tareas
+- Fechas de vencimiento
 
-## 📦 Instalación
+### 👥 Gestión de Contactos
+- CRUD completo de contactos
+- Tipos: Cliente, Prospecto, Proveedor, Socio
+- Historial de interacciones
+- Notas y seguimiento
 
-### **Paso 1: Preparar el Script**
+### 📈 Pipeline de Ventas
+- Gestión de oportunidades
+- Etapas configurables
+- Valor y probabilidad de cierre
+- Seguimiento de conversiones
 
-1. Abre [Google Apps Script](https://script.google.com)
-2. Crea un nuevo proyecto
-3. Elimina el código por defecto
-4. Copia y pega el contenido de **`Code_Part1.gs`** (y luego Part 2 y 3)
-5. Guarda el proyecto con nombre: **"OVA CRM Backend"**
+### 💰 Cotizaciones
+- Crear cotizaciones profesionales
+- Gestión de items y precios
+- Cálculo automático de IVA y totales
+- Estados: Borrador, Enviada, Aprobada, Rechazada
 
-### **Paso 2: Ejecutar Configuración Inicial**
+### 🤖 Chat IA con Groq
+- Asistente virtual inteligente
+- Powered by Llama 3.3 70B
+- Ayuda con gestión del CRM
+- Respuestas en tiempo real
 
-1. En el editor de Apps Script, selecciona la función: **`configurarSistemaCompleto`**
-2. Haz clic en **"Ejecutar"** (▶️)
-3. La primera vez te pedirá permisos:
-   - Autoriza el acceso a Google Sheets
-   - Autoriza el acceso a Google Calendar
-   - Autoriza el acceso a Google Drive
-4. Espera a que termine la ejecución (verás un popup de confirmación)
-
-**✅ Esto creará automáticamente:**
-- 📊 Spreadsheet: "OVA CRM - Base de Datos" con 18 hojas
-- 📅 Calendario: "OVA CRM - Calendario"
-- 📁 Carpeta Drive: "OVA CRM - Documentos" con subcarpetas
-
-### **Paso 3: Guardar los IDs**
-
-Después de la configuración, anota estos datos (aparecerán en los logs):
-- **Spreadsheet ID**: (lo encontrarás en la URL del Sheets creado)
-- **Calendar ID**: (en los logs de ejecución)
-- **Drive Folder ID**: (en los logs de ejecución)
+### 🔒 Sistema de Autenticación
+- Login seguro con tokens
+- 4 niveles de roles: Admin, Manager, Usuario, ReadOnly
+- Permisos granulares por módulo
+- Sesiones con expiración
 
 ---
 
-## 🔑 Configuración de API Key
+## 🏗️ Arquitectura
 
-La API key de Groq **NO está hardcodeada** por seguridad. Debes configurarla manualmente:
+```
+Frontend:           Next.js 14 + React + TypeScript
+Backend:            Next.js API Routes (Serverless)
+Base de Datos:      Google Sheets (via Google Sheets API)
+Autenticación:      JWT + Session Tokens
+IA:                 Groq API (Llama 3.3 70B)
+Deployment:         Vercel
+Costo:              $0 (100% GRATIS)
+```
 
-### **Opción 1: Desde Google Sheets (Recomendado)**
+### Stack Tecnológico
 
-1. Abre el Spreadsheet **"OVA CRM - Base de Datos"**
-2. Ve a la hoja **"Configuracion"**
-3. En la fila donde dice **"GROQ_API_KEY"** (fila 2)
-4. En la columna **"Valor"** (columna B), pega tu API key de Groq:
-   ```
-   gsk_TU_API_KEY_AQUI
-   ```
-5. Guarda el cambio (Ctrl + S)
-
-> 💡 **¿Dónde obtener la API key?**
-> 1. Ve a [console.groq.com](https://console.groq.com)
-> 2. Crea una cuenta o inicia sesión
-> 3. Ve a la sección de API Keys
-> 4. Crea una nueva key y cópiala
-
-### **Opción 2: Desde Apps Script**
-
-1. En el editor de Apps Script
-2. Ejecuta este comando en la consola (o crea una función y ejecútala):
-   ```javascript
-   PropertiesService.getScriptProperties().setProperty('GROQ_API_KEY', 'gsk_TU_API_KEY_AQUI');
-   ```
-
-### **Verificar la Configuración**
-
-El sistema intentará obtener la API key en este orden:
-1. PropertiesService (si existe)
-2. Hoja de Configuración (si no está en PropertiesService)
-
----
-
-## 🌐 Despliegue como Web App
-
-### **Paso 1: Crear Index.html**
-
-1. En el editor de Apps Script, crea un nuevo archivo HTML:
-   - **Archivo** → **Nuevo** → **Archivo HTML**
-   - Nómbralo: **`Index`**
-2. Pega el contenido del frontend (te lo proporcionaré después)
-
-### **Paso 2: Desplegar**
-
-1. Haz clic en **"Implementar"** → **"Nueva implementación"**
-2. Selecciona tipo: **"Aplicación web"**
-3. Configuración:
-   - **Ejecutar como**: `Yo (tu email)`
-   - **Quién tiene acceso**: `Cualquier usuario`
-4. Haz clic en **"Implementar"**
-5. **Copia la URL** que te proporciona
-
-### **Paso 3: Acceder al CRM**
-
-- Abre la URL en tu navegador
-- Verás la página de login de OVA CRM
-- Usa las credenciales por defecto (ver abajo)
-
----
-
-## 👥 Usuarios por Defecto
-
-El sistema viene con 3 usuarios de prueba:
-
-| Username | Password | Nombre | Rol | Permisos |
-|----------|----------|--------|-----|----------|
-| `admin` | `admin123` | Administrador OVA | admin | Acceso total |
-| `manager` | `manager123` | Manager Demo | manager | Ver todo, crear, editar, reportes, config |
-| `usuario1` | `user123` | Usuario Demo 1 | usuario | Ver propio, crear, editar propio |
-
-**⚠️ Importante**: Cambia las contraseñas después del primer login.
+- **Next.js 14**: Framework de React con SSR y API Routes
+- **TypeScript**: Tipado estático para mayor seguridad
+- **Tailwind CSS**: Estilos utility-first
+- **Google Sheets API**: Base de datos en Google Sheets
+- **Groq API**: IA generativa para el chat
+- **Vercel**: Hosting y deployment automático
+- **Lucide Icons**: Iconos modernos y ligeros
 
 ---
 
 ## 📁 Estructura del Proyecto
 
 ```
-OVA CRM/
-├── Code_Part1.gs          # Backend: Configuración y estructura base
-├── Code_Part2.gs          # Backend: Chat IA, CRUD, Dashboard
-├── Code_Part3.gs          # Backend: Kanban, Pipeline, Cotizaciones, Reportes
-├── Index.html             # Frontend: Aplicación web completa
-├── Login.html             # Frontend: Página de login (opcional)
-└── README.md              # Este archivo
+ClaudeCode/
+├── pages/
+│   ├── api/                    # API Routes (Backend)
+│   │   ├── auth/              # Autenticación
+│   │   │   ├── login.ts
+│   │   │   ├── logout.ts
+│   │   │   └── validate.ts
+│   │   ├── reuniones/         # CRUD Reuniones
+│   │   ├── tareas/            # CRUD Tareas
+│   │   ├── contactos/         # CRUD Contactos
+│   │   ├── pipeline/          # CRUD Pipeline
+│   │   ├── cotizaciones/      # CRUD Cotizaciones
+│   │   └── chat/              # Chat IA
+│   ├── _app.tsx               # App wrapper
+│   ├── _document.tsx          # Document config
+│   ├── index.tsx              # Login page
+│   └── dashboard.tsx          # Dashboard
+├── components/
+│   └── Layout.tsx             # Layout principal
+├── lib/
+│   ├── sheets.ts              # Google Sheets API client
+│   ├── auth.ts                # Autenticación
+│   └── utils.ts               # Utilidades
+├── middleware/
+│   └── auth.ts                # Middleware de autenticación
+├── types/
+│   └── index.ts               # TypeScript types
+├── styles/
+│   └── globals.css            # Estilos globales
+├── package.json
+├── tsconfig.json
+├── next.config.js
+├── tailwind.config.js
+├── .env.example               # Template de variables
+├── .gitignore
+├── SETUP.md                   # Guía de instalación
+└── README.md                  # Este archivo
 ```
 
-### **Hojas del Spreadsheet (18 total)**
+---
 
-**Datos Principales:**
-- `Usuarios` - Gestión de usuarios y roles
-- `Reuniones` - Reuniones sincronizadas con Calendar
-- `Tareas` - Tareas con estados Kanban
-- `Contactos` - Clientes y prospectos
-- `Documentos` - Archivos subidos a Drive
+## 🚀 Instalación y Deployment
 
-**Ventas:**
-- `Pipeline` - Oportunidades de venta
-- `Cotizaciones` - Cotizaciones enviadas
-- `ItemsCotizacion` - Detalle de productos/servicios
+### Opción 1: Deploy Directo en Vercel (Recomendado)
 
-**Configuración:**
-- `Configuracion` - Parámetros del sistema
-- `Prompts` - Prompts para la IA
+Sigue la guía completa en **[SETUP.md](./SETUP.md)** que incluye:
 
-**Sistema:**
-- `Conversaciones` - Historial del chat IA
-- `Sesiones` - Sesiones web activas
-- `AuditoriaLog` - Log de acciones
+1. ✅ Configuración de Google Cloud
+2. ✅ Configuración de Groq API
+3. ✅ Deployment en Vercel
+4. ✅ Configuración de variables de entorno
+5. ✅ Solución de problemas
 
-**Reportes:**
-- `MetricasDashboard` - Métricas en tiempo real
-- `ReportesVentas` - Datos de ventas
-
-**Auxiliares:**
-- `Categorias` - Categorías de tareas/documentos
-- `Notificaciones` - Notificaciones del sistema
-- `Recordatorios` - Recordatorios automáticos
+**Tiempo estimado**: 15-20 minutos
 
 ---
 
-## ⚙️ Configuraciones Importantes
+### Opción 2: Desarrollo Local
 
-Puedes modificar estas configuraciones en la hoja **"Configuracion"**:
+```bash
+# 1. Clonar el repositorio
+git clone https://github.com/ovavisionve/ClaudeCode.git
+cd ClaudeCode
 
-| Parámetro | Valor por Defecto | Descripción |
-|-----------|-------------------|-------------|
-| `GROQ_API_KEY` | *(vacío)* | ⚠️ REQUERIDO: Tu API key de Groq |
-| `MODELO_IA` | llama-3.3-70b-versatile | Modelo de IA a usar |
-| `TEMPERATURA_IA` | 0.3 | Creatividad de la IA (0.0-1.0) |
-| `DASHBOARD_AUTOREFRESH` | SI | Auto-actualizar dashboard |
-| `DASHBOARD_REFRESH_SEGUNDOS` | 30 | Segundos entre actualizaciones |
-| `TIMEZONE` | America/Caracas | Zona horaria |
-| `EMPRESA_NOMBRE` | OVA | Nombre de tu empresa |
+# 2. Instalar dependencias
+npm install
 
----
+# 3. Configurar variables de entorno
+cp .env.example .env
+# Edita .env con tus valores (ver SETUP.md)
 
-## 🔄 Automatizaciones Configuradas
+# 4. Ejecutar en modo desarrollo
+npm run dev
 
-El sistema ejecuta automáticamente:
-
-1. **Cada 5 minutos**: Actualizar métricas del dashboard
-2. **Cada hora**: Procesar recordatorios pendientes
-3. **Cada 30 minutos**: Actualizar estados automáticos
-4. **Diario 2 AM**: Limpiar sesiones expiradas
-5. **Diario 6 PM**: Generar reporte del día
+# 5. Abrir en el navegador
+# http://localhost:3000
+```
 
 ---
 
-## 🛡️ Seguridad
+## 🔑 Variables de Entorno
 
+Crea un archivo `.env` con las siguientes variables:
+
+```env
+# Google Sheets Configuration
+SPREADSHEET_ID=1VO0MxFKTrxh8SYMYCijREzykDKQZN9hVxOdWieFBe-o
+
+# Google Service Account
+GOOGLE_SERVICE_ACCOUNT_EMAIL=tu-service-account@tu-proyecto.iam.gserviceaccount.com
+GOOGLE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"
+
+# Groq API
+GROQ_API_KEY=tu_groq_api_key
+
+# Session Secret
+SESSION_SECRET=cadena_aleatoria_de_32_caracteres_minimo
+```
+
+Ver **[SETUP.md](./SETUP.md)** para instrucciones detalladas de cómo obtener cada valor.
+
+---
+
+## 👤 Usuarios de Prueba
+
+Por defecto, el sistema incluye estos usuarios:
+
+| Usuario   | Contraseña  | Rol      |
+|-----------|-------------|----------|
+| admin     | admin123    | Admin    |
+| manager   | manager123  | Manager  |
+| usuario1  | user123     | Usuario  |
+
+**IMPORTANTE**: Cambia estas contraseñas en producción.
+
+---
+
+## 🛠️ Comandos Disponibles
+
+```bash
+# Desarrollo
+npm run dev          # Inicia servidor de desarrollo en http://localhost:3000
+
+# Producción
+npm run build        # Construye la aplicación para producción
+npm start            # Inicia el servidor de producción
+
+# Linting
+npm run lint         # Ejecuta ESLint para verificar el código
+```
+
+---
+
+## 📊 Base de Datos (Google Sheets)
+
+El sistema utiliza las siguientes hojas:
+
+1. **Usuarios** - Gestión de usuarios y permisos
+2. **Sesiones** - Tokens de sesión activos
+3. **Reuniones** - Reuniones y eventos
+4. **Tareas** - Tareas del equipo
+5. **Contactos** - Base de datos de contactos
+6. **Documentos** - Archivos relacionados
+7. **Pipeline** - Oportunidades de venta
+8. **Cotizaciones** - Cotizaciones generadas
+9. **ItemsCotizacion** - Items de cada cotización
+10. **Configuracion** - Configuración del sistema
+11. **Prompts** - Prompts para el Chat IA
+12. **Conversaciones** - Historial del chat
+13. **AuditoriaLog** - Log de auditoría
+14. **MetricasDashboard** - Métricas del dashboard
+15. **ReportesVentas** - Reportes de ventas
+16. **Categorias** - Categorías de tareas
+17. **Notificaciones** - Notificaciones del sistema
+18. **Recordatorios** - Recordatorios programados
+
+---
+
+## 🔒 Seguridad
+
+- ✅ Autenticación con tokens seguros
 - ✅ Contraseñas hasheadas con SHA-256
-- ✅ Tokens de sesión únicos
 - ✅ Sesiones con expiración (24 horas)
-- ✅ API keys en configuración, no hardcodeadas
-- ✅ Sistema de roles y permisos
-- ✅ Log de auditoría completo
+- ✅ Middleware de autenticación en todas las rutas API
+- ✅ Validación de permisos por rol
+- ✅ Variables de entorno para secretos
+- ✅ Service Account para Google Sheets API
+
+---
+
+## 📈 Límites y Cuotas (100% GRATIS)
+
+### Vercel (Plan Hobby - Gratis)
+- ✅ Bandwidth: 100 GB/mes
+- ✅ Builds: Ilimitados
+- ✅ Serverless Functions: 100 GB-hours/mes
+- ✅ Deployments: Ilimitados
+
+### Google Sheets API (Gratis)
+- ✅ 300 requests/minuto por proyecto
+- ✅ 60 requests/minuto por usuario
+- ✅ Sin límite diario
+- ✅ Gratis para siempre
+
+### Groq API (Plan Gratuito)
+- ✅ Requests: Generosos límites gratuitos
+- ✅ Modelo: Llama 3.3 70B
+- ✅ Sin necesidad de tarjeta de crédito
+
+**Total: $0/mes** 🎉
+
+---
+
+## 🎨 Personalización
+
+### Cambiar Colores
+
+Edita `tailwind.config.js` para cambiar el esquema de colores:
+
+```js
+colors: {
+  primary: {
+    // Cambia estos valores
+    500: '#a855f7',  // Color principal
+    600: '#9333ea',  // Hover
+    // ...
+  }
+}
+```
+
+### Cambiar Logo
+
+Reemplaza el SVG en `pages/index.tsx` (línea ~80) con tu logo.
 
 ---
 
 ## 🐛 Solución de Problemas
 
-### **"Error: SPREADSHEET_ID no definido"**
-- Asegúrate de haber ejecutado `configurarSistemaCompleto()` primero
+Ver la sección completa de troubleshooting en **[SETUP.md](./SETUP.md#solución-de-problemas)**
 
-### **"Chat IA no responde"**
-- Verifica que hayas configurado `GROQ_API_KEY` en la hoja Configuracion
-- Revisa que la API key sea válida
+### Problemas Comunes
 
-### **"No puedo hacer login"**
-- Verifica el username y password
-- Asegúrate de que el usuario esté activo (columna "Activo" = "SI")
+1. **Error de build**: Verifica las variables de entorno
+2. **Error de autenticación**: Verifica Google Service Account
+3. **Chat IA no funciona**: Verifica Groq API Key
+4. **No se cargan datos**: Verifica permisos del Spreadsheet
 
-### **"Los triggers no funcionan"**
-- Ve a **Activadores** en el menú de Apps Script
-- Verifica que los 5 triggers estén activos
+---
+
+## 📝 Changelog
+
+### v2.0.0 (Actual)
+- ✅ Migración completa de Google Apps Script a Next.js
+- ✅ Backend con Next.js API Routes
+- ✅ Deployment en Vercel
+- ✅ Google Sheets API para base de datos
+- ✅ TypeScript para todo el proyecto
+- ✅ Tailwind CSS para estilos
+- ✅ Sistema de autenticación robusto
+- ✅ Chat IA con Groq API
+
+### v1.0.0 (Anterior)
+- Google Apps Script + HTML
+- Base de datos en Google Sheets
+- Frontend monolítico
+
+---
+
+## 🤝 Contribuciones
+
+Las contribuciones son bienvenidas. Por favor:
+
+1. Fork el repositorio
+2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
+3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
+4. Push a la rama (`git push origin feature/AmazingFeature`)
+5. Abre un Pull Request
+
+---
+
+## 📄 Licencia
+
+Este proyecto es privado y pertenece a OVA Vision.
 
 ---
 
 ## 📞 Soporte
 
-Para preguntas o problemas:
-- 📧 Email: contacto@ova.com
-- 📱 Teléfono: +58 412 1234567
+Si tienes problemas:
+
+1. Revisa **[SETUP.md](./SETUP.md)** para la guía completa
+2. Verifica la sección de troubleshooting
+3. Revisa los logs en Vercel (Deployments → View Function Logs)
+4. Abre un issue en GitHub
 
 ---
 
-## 📝 Licencia
+## 🎯 Roadmap
 
-© 2026 OVA - Todos los derechos reservados.
-
----
-
-## 🎯 Estado del Proyecto
-
-1. ✅ **Code_Part1.gs**: Configuración y estructura base (Completada - 2,000 líneas)
-2. ✅ **Code_Part2.gs**: Chat IA, CRUD completo, Dashboard (Completada - 2,800 líneas)
-3. ✅ **Code_Part3.gs**: Pipeline, Cotizaciones, Reportes, Automatizaciones (Completada - 2,500 líneas)
-4. ✅ **Index.html**: Frontend completo con todas las vistas (Completada - 2,500 líneas)
-
-**TOTAL: ~9,800 líneas de código**
+- [ ] Agregar más visualizaciones en el dashboard
+- [ ] Integración con Google Calendar para reuniones
+- [ ] Exportar reportes a PDF
+- [ ] Notificaciones push
+- [ ] App móvil (PWA)
+- [ ] Integración con WhatsApp Business
+- [ ] Dashboard de analíticas avanzadas
 
 ---
 
-## 🚀 Sistema Completo y Funcional
+**Hecho con ❤️ por OVA Vision**
 
-El sistema OVA CRM está completamente implementado y listo para usar. Todos los archivos están en este repositorio:
-
-- ✅ Backend completo (~7,300 líneas)
-- ✅ Frontend completo (~2,500 líneas)
-- ✅ Documentación completa
-- ✅ Sistema de seguridad implementado
-- ✅ Automatizaciones configuradas
-- ✅ Chat IA integrado
-
-**¡El CRM está listo para desplegarse!** 🎉
+🚀 **¡Listo para transformar tu gestión de clientes!**
